@@ -15,28 +15,41 @@ def run_streak():
         )
         page = context.new_page()
 
-        print("Opening animesss.tv...")
-        page.goto("https://animesss.tv/", wait_until="networkidle")
+        try:
+            print("Opening animesss.tv...")
+            page.goto("https://animesss.tv/", wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_load_state("networkidle", timeout=60000)
+            
+            print("Waiting for login button...")
+            login_button = page.get_by_role("button", name="Войти").first
+            login_button.wait_for(timeout=60000)
+            
+            print("Opening login modal...")
+            login_button.click(timeout=60000)
+            
+            print("Waiting for login form...")
+            page.wait_for_load_state("networkidle", timeout=60000)
 
-        print("Opening login modal...")
-        page.get_by_role("button", name="Войти").first.click()
+            print("Entering credentials...")
+            page.get_by_placeholder("Ваш логин").fill(username, timeout=30000)
+            page.get_by_placeholder("Ваш пароль").fill(password, timeout=30000)
 
-        print("Entering credentials...")
-        
-        page.get_by_placeholder("Ваш логин").fill(username)
-        page.get_by_placeholder("Ваш пароль").fill(password)
+            print("Submitting login...")
+            page.get_by_role("button", name="ВОЙТИ НА САЙТ").click(timeout=60000)
 
-        print("Submitting login...")
-        page.get_by_role("button", name="ВОЙТИ НА САЙТ").click()
-
-        # 4. Verification and Streak Saving
-        # Most anime sites save the streak just by being logged in on the home page.
-        page.wait_for_load_state("networkidle")
-        time.sleep(5) # Stay for 5 seconds to ensure the 'visit' is logged
-        
-        print(f"Successfully logged in as {username}. Streak maintained!")
-        
-        browser.close()
+            # Verification and Streak Saving
+            page.wait_for_load_state("networkidle", timeout=60000)
+            time.sleep(5)  # Stay for 5 seconds to ensure the 'visit' is logged
+            
+            print(f"Successfully logged in as {username}. Streak maintained!")
+            
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            # Take screenshot for debugging
+            page.screenshot(path="error_screenshot.png")
+            raise
+        finally:
+            browser.close()
 
 if __name__ == "__main__":
     run_streak()
