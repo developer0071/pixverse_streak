@@ -21,7 +21,7 @@ def run_streak():
         # 1. Click the Login button in the top right to open the modal
         # Based on your screenshot, it's the button with the 'user' icon/text "Войти"
         print("Opening login modal...")
-        page.get_by_text("Войти").click()
+        page.get_by_role("button", name="Войти").first.click()
         
         # Wait a second for the modal animation to finish
         time.sleep(1)
