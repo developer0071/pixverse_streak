@@ -42,17 +42,12 @@ def run_streak():
                 pass
 
             # ── 3. Click the header "ВОЙТИ" button to open the login modal ────
-            # Selector: the top-right login link/button that contains the text ВОЙТИ
             print("Clicking header ВОЙТИ button...")
-            header_login = page.locator('a.header__login, a:has-text("ВОЙТИ"), button:has-text("ВОЙТИ")').first
-            try:
-                header_login.wait_for(state="visible", timeout=15000)
-                header_login.click(timeout=15000)
-            except PlaywrightTimeoutError:
-                # Force-click as last resort (bypasses invisible overlays)
-                print("Visible click timed out — force-clicking...")
-                header_login.click(force=True)
-
+            
+            header_login = page.get_by_text("ВОЙТИ", exact=False).filter(visible=True).first
+            
+            header_login.click(timeout=15000)
+            
             # ── 4. Wait for the login modal to appear ─────────────────────────
             print("Waiting for login modal...")
             try:
