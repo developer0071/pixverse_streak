@@ -18,16 +18,10 @@ def run_streak():
         print("Opening animesss.tv...")
         page.goto("https://animesss.tv/", wait_until="networkidle")
 
-        # 1. Click the Login button in the top right to open the modal
-        # Based on your screenshot, it's the button with the 'user' icon/text "Войти"
         print("Opening login modal...")
-        page.get_by_role("button", name="Войти").first.click()
-        
-        # Wait a second for the modal animation to finish
+        page.get_by_role("button", name="Войти").first.click()        
         time.sleep(1)
 
-        # 2. Fill in the credentials inside the modal
-        # We use placeholders or specific input types since IDs might change
         print("Entering credentials...")
         page.get_by_placeholder("Khurshid").fill(username)
         page.get_by_placeholder("••••••••••••").fill(password)

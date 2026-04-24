@@ -25,8 +25,8 @@ jobs:
 
       - name: Run Streak Bot
         env:
-          USERNAME: ${{ secrets.SITE_USERNAME }}
-          PASSWORD: ${{ secrets.SITE_PASSWORD }}
+          USER_ID: ${{ secrets.USER_ID }}
+          USER_PASS: ${{ secrets.USER_PASS }}
         run: python streak_bot.py
 
       - name: Commit updated session (auth.json)
