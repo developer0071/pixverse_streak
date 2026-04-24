@@ -1,0 +1,38 @@
+name: Daily Streak Keeper
+
+on:
+  schedule:
+    # Runs at 05:00 UTC every day
+    - cron: '0 5 * * *'
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Run Streak Bot
+        env:
+          USERNAME: ${{ secrets.SITE_USERNAME }}
+          PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: python streak_bot.py
+
+      - name: Commit updated session (auth.json)
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add auth.json
+          git commit -m "Update session cookies" || echo "No changes"
+          git push
