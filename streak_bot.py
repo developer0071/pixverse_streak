@@ -19,14 +19,13 @@ def run_streak():
         page.goto("https://animesss.tv/", wait_until="networkidle")
 
         print("Opening login modal...")
-        page.get_by_role("button", name="Войти").first.click()        
-        time.sleep(1)
+        page.get_by_role("button", name="Войти").first.click()
 
         print("Entering credentials...")
-        page.get_by_placeholder("Khurshid").fill(username)
-        page.get_by_placeholder("••••••••••••").fill(password)
+        
+        page.get_by_placeholder("Ваш логин").fill(username)
+        page.get_by_placeholder("Ваш пароль").fill(password)
 
-        # 3. Click the "ВОЙТИ НА САЙТ" button
         print("Submitting login...")
         page.get_by_role("button", name="ВОЙТИ НА САЙТ").click()
 
