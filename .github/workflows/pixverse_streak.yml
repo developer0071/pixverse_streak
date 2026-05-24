@@ -2,9 +2,8 @@ name: PixVerse Daily Streak Automated
 
 on:
   schedule:
-    # Executes at 04:30 UTC daily
     - cron: '30 4 * * *'
-  workflow_dispatch: # Permits manual execution for testing
+  workflow_dispatch:
 
 jobs:
   execute-streak-bot:
@@ -28,12 +27,16 @@ jobs:
         env:
           USER_ID: ${{ secrets.USER_ID }}
           USER_PASS: ${{ secrets.USER_PASS }}
+          USER_ID2: ${{ secrets.USER_ID2 }}
+          USER_PASS2: ${{ secrets.USER_PASS2 }}
+          USER_ID3: ${{ secrets.USER_ID3 }}
+          USER_PASS3: ${{ secrets.USER_PASS3 }}
         run: python pixverse_bot.py
 
       - name: Capture Diagnostic Artifacts
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: headless-failure-screenshot
-          path: error_screenshot.png
+          name: headless-failure-screenshots
+          path: error_*.png
           retention-days: 5
