@@ -1,5 +1,4 @@
 import os
-import time
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 def run_streak():
@@ -75,15 +74,18 @@ def run_streak():
             submit_btn = page.locator('button:has-text("Login"), button[type="submit"]').last
             submit_btn.click(timeout=15000)
 
-            # ── 6. Verify Session Integrity ─────────────────────────────────────
+            # ── 6. Verify Session Integrity & Register Streak ───────────────────
             print("[*] Awaiting post-login redirect/network idle...")
             try:
                 page.wait_for_load_state("networkidle", timeout=20000)
             except PlaywrightTimeoutError:
                 pass
 
-            # Buffer to ensure backend streak registration is complete
-            time.sleep(5)  
+            # Extended buffer (15 seconds) to ensure the backend streak API registers the visit.
+            # Using wait_for_timeout keeps the browser event loop active, unlike time.sleep().
+            print("[*] Holding session open for 15 seconds to finalize streak registration...")
+            page.wait_for_timeout(15000) 
+            
             print(f"[✓] Streak successfully maintained for {username}.")
 
         except Exception as e:
